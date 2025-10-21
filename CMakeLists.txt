@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 add_executable(MazeCLI
     main.cpp
     src/welcome.cpp
+    src/builder.cpp
 )
 
 # Add include directory for headers

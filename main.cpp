@@ -1,3 +1,4 @@
+#include "include/builder.h"
 #include "include/welcome.h"
 
 // welcomeMessage function
@@ -26,10 +27,9 @@
 //
 // endGame function
 // displayWinMessage
-
 int main() {
   welcomeMessage();
-  // buildMaze();
+  buildMaze();
   // startGame();
   // endGame();
   return 0;
