@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.23)
+
+project(MazeCLI)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17) # User C++17
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Add source files
+add_executable(MazeCLI
+    main.cpp
+    src/welcome.cpp
+)
+
+# Add include directory for headers
+include_directories(${CMAKE_SOURCE_DIR}/include)
