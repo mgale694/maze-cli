@@ -27,6 +27,7 @@
 //
 // endGame function
 // displayWinMessage
+
 int main() {
   welcomeMessage();
   buildMaze();
