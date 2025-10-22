@@ -28,3 +28,6 @@ This is a simple command-line interface (CLI) application that generates and dis
   - Check for win condition (reaching the end of the maze)
 5. **Exit Condition**: Allow the user to exit the game gracefully
 
+### NOTES
+- This is a basic implementation and so a lot of the code will be very Functional
+- In the future we can add more OOP principles with classes for Maze, Player, etc.
