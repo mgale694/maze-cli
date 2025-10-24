@@ -70,10 +70,27 @@ void createCorrectPath(std::vector<std::vector<char>> &grid, int startRow,
   // Mark starting position
   grid[currentRow][currentCol] = ' ';
 
+  int horizontalMoveCount = 0;
+
   // Alternate between horizontal and vertical moves
   while (currentRow != endRow || currentCol != endCol) {
-    // Move horizontally if needed
-    if (currentCol != endCol) {
+    bool forcedVertical = false;
+
+    // Force a vertical move if we've moved horizontally too long
+    if (horizontalMoveCount >= 3 && currentRow != endRow) {
+      horizontalMoveCount = 0;
+      if (currentRow < endRow) {
+        currentRow++;
+      } else {
+        currentRow--;
+      }
+      grid[currentRow][currentCol] = ' ';
+      forcedVertical = true;
+    }
+
+    // Move horizontally if needed (and we didn't just force a vertical move)
+    if (!forcedVertical && currentCol != endCol) {
+      horizontalMoveCount++;
       if (currentCol < endCol) {
         currentCol++;
       } else {
@@ -81,9 +98,9 @@ void createCorrectPath(std::vector<std::vector<char>> &grid, int startRow,
       }
       grid[currentRow][currentCol] = ' ';
     }
-
-    // Move vertically if needed
-    if (currentRow != endRow) {
+    // Move vertically if needed (and we haven't already)
+    else if (!forcedVertical && currentRow != endRow) {
+      horizontalMoveCount = 0;
       if (currentRow < endRow) {
         currentRow++;
       } else {
@@ -133,6 +150,6 @@ void buildMaze() {
   // 3. Add correct path
   createCorrectPath(grid, start, 0, end, width - 1);
   // 4. Fill random paths (20% of remaining walls become paths)
-  // fillRandomPaths(grid, 50);
+  fillRandomPaths(grid, 50);
   debugPrintGrid(grid);
 }
