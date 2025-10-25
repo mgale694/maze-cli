@@ -5,6 +5,13 @@
 #include <sstream>
 #include <string>
 
+// TODO: Implement the MazeBuilder class and its methods
+// This should include trhe functional methods as seen in this file.
+class MazeBuiilder {
+public:
+  int width, height;
+};
+
 /*
  * Function to get user input for maze dimensions
  *

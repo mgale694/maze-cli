@@ -31,6 +31,7 @@
 int main() {
   welcomeMessage();
   buildMaze();
+  // auto maze = buildMaze();
   // startGame();
   // endGame();
   return 0;
