@@ -11,6 +11,7 @@ add_executable(MazeCLI
     main.cpp
     src/welcome.cpp
     src/builder.cpp
+    src/runner.cpp
 )
 
 # Add include directory for headers

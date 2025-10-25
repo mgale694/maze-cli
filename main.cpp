@@ -1,4 +1,5 @@
 #include "include/builder.h"
+#include "include/runner.h"
 #include "include/welcome.h"
 #include <iostream>
 #include <sstream>
@@ -57,7 +58,9 @@ int main() {
   maze.generate();
   maze.debugPrint();
   
-  // startGame();
-  // endGame();
+  // Start the game
+  GameRunner game(maze);
+  game.start();
+  
   return 0;
 }
