@@ -2,85 +2,33 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
-#include <sstream>
-#include <string>
 
-// TODO: Implement the MazeBuilder class and its methods
-// This should include trhe functional methods as seen in this file.
-class MazeBuiilder {
-public:
-  int width, height;
-};
-
-/*
- * Function to get user input for maze dimensions
- *
- * @param width Reference to the width variable
- * @param height Reference to the height variable
- */
-void userInputDimensions(int &width, int &height) {
-  std::string input;
-
-  std::cout << "Enter maze width (default " << width << "): ";
-  std::getline(std::cin, input);
-  if (!input.empty()) {
-    std::stringstream ss(input);
-    ss >> width;
-  }
-
-  std::cout << "Enter maze height (default " << height << "): ";
-  std::getline(std::cin, input);
-  if (!input.empty()) {
-    std::stringstream ss(input);
-    ss >> height;
-  }
+Maze::Maze(int w, int h) : width(w), height(h), startRow(0), endRow(0) {
+  srand(time(0));
 }
 
-/*
- * Function to create a grid initialized with walls ('#')
- *
- * @param width The width of the grid
- * @param height The height of the grid
- *
- * @return A 2D vector representing the grid
- */
-std::vector<std::vector<char>> createGrid(int width, int height) {
-  std::vector<std::vector<char>> grid(height, std::vector<char>(width, '#'));
-  return grid;
+void Maze::createGrid() {
+  grid = std::vector<std::vector<char>>(height, std::vector<char>(width, '#'));
 }
 
-int pickStartOrEnd(int height) {
-  int position = rand() % height;
-  return position;
+int Maze::pickRandomRow() { return rand() % height; }
+
+void Maze::placeStartEnd() {
+  startRow = pickRandomRow();
+  endRow = pickRandomRow();
+  grid[startRow][0] = ' ';
+  grid[endRow][width - 1] = ' ';
 }
 
-void debugPrintGrid(const std::vector<std::vector<char>> &grid) {
-  for (const auto &row : grid) {
-    for (char cell : row) {
-      std::cout << cell;
-    }
-    std::cout << std::endl;
-  }
-}
-
-void updateGridWithStartEnd(std::vector<std::vector<char>> &grid, int start,
-                            int end) {
-  grid[start][0] = ' ';                // Start point
-  grid[end][grid[0].size() - 1] = ' '; // End point
-}
-
-void createCorrectPath(std::vector<std::vector<char>> &grid, int startRow,
-                       int startCol, int endRow, int endCol) {
+void Maze::createCorrectPath() {
   int currentRow = startRow;
-  int currentCol = startCol;
+  int currentCol = 0;
 
-  // Mark starting position
   grid[currentRow][currentCol] = ' ';
 
   int horizontalMoveCount = 0;
 
-  // Alternate between horizontal and vertical moves
-  while (currentRow != endRow || currentCol != endCol) {
+  while (currentRow != endRow || currentCol != width - 1) {
     bool forcedVertical = false;
 
     // Force a vertical move if we've moved horizontally too long
@@ -95,17 +43,13 @@ void createCorrectPath(std::vector<std::vector<char>> &grid, int startRow,
       forcedVertical = true;
     }
 
-    // Move horizontally if needed (and we didn't just force a vertical move)
-    if (!forcedVertical && currentCol != endCol) {
+    // Move horizontally if needed
+    if (!forcedVertical && currentCol != width - 1) {
       horizontalMoveCount++;
-      if (currentCol < endCol) {
-        currentCol++;
-      } else {
-        currentCol--;
-      }
+      currentCol++;
       grid[currentRow][currentCol] = ' ';
     }
-    // Move vertically if needed (and we haven't already)
+    // Move vertically if needed
     else if (!forcedVertical && currentRow != endRow) {
       horizontalMoveCount = 0;
       if (currentRow < endRow) {
@@ -118,16 +62,10 @@ void createCorrectPath(std::vector<std::vector<char>> &grid, int startRow,
   }
 }
 
-void fillRandomPaths(std::vector<std::vector<char>> &grid, int percentage) {
-  int height = grid.size();
-  int width = grid[0].size();
-
-  // Go through each cell in the grid
+void Maze::fillRandomPaths(int percentage) {
   for (int row = 1; row < height - 1; row++) {
     for (int col = 1; col < width - 1; col++) {
-      // Only modify cells that are currently walls
       if (grid[row][col] == '#') {
-        // Randomly decide to carve this cell based on percentage
         if ((rand() % 100) < percentage) {
           grid[row][col] = ' ';
         }
@@ -136,27 +74,20 @@ void fillRandomPaths(std::vector<std::vector<char>> &grid, int percentage) {
   }
 }
 
-void buildMaze() {
-  int width = 75, height = 20;
-
-  std::cout << "Building a new maze!\n";
-
-  // 0. Get user input for dimensions (default 50x25)
-  userInputDimensions(width, height);
-
-  // Seed random number generator
-  srand(time(0));
-
-  // Implementation for building a maze
-  // 1. Create grid
-  auto grid = createGrid(width, height);
-  // 2. Place start and end points
-  int start = pickStartOrEnd(height);
-  int end = pickStartOrEnd(height);
-  updateGridWithStartEnd(grid, start, end);
-  // 3. Add correct path
-  createCorrectPath(grid, start, 0, end, width - 1);
-  // 4. Fill random paths (20% of remaining walls become paths)
-  fillRandomPaths(grid, 50);
-  debugPrintGrid(grid);
+void Maze::generate() {
+  createGrid();
+  placeStartEnd();
+  createCorrectPath();
+  fillRandomPaths(50);
 }
+
+void Maze::debugPrint() const {
+  for (const auto &row : grid) {
+    for (char cell : row) {
+      std::cout << cell;
+    }
+    std::cout << std::endl;
+  }
+}
+
+const std::vector<std::vector<char>> &Maze::getGrid() const { return grid; }

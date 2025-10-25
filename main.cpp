@@ -1,5 +1,8 @@
 #include "include/builder.h"
 #include "include/welcome.h"
+#include <iostream>
+#include <sstream>
+#include <string>
 
 // welcomeMessage function
 // printWelcome
@@ -30,8 +33,30 @@
 
 int main() {
   welcomeMessage();
-  buildMaze();
-  // auto maze = buildMaze();
+  
+  // Get user input for dimensions
+  int width = 75, height = 20;
+  std::string input;
+  
+  std::cout << "Enter maze width (default " << width << "): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+    std::stringstream ss(input);
+    ss >> width;
+  }
+
+  std::cout << "Enter maze height (default " << height << "): ";
+  std::getline(std::cin, input);
+  if (!input.empty()) {
+    std::stringstream ss(input);
+    ss >> height;
+  }
+  
+  // Initialize and generate maze
+  Maze maze(width, height);
+  maze.generate();
+  maze.debugPrint();
+  
   // startGame();
   // endGame();
   return 0;
