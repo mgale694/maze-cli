@@ -1,33 +1,95 @@
-# Simple Maze CLI 
-This is a simple command-line interface (CLI) application that generates and displays mazes in the terminal. The maze is created using a randomized algorithm and can be customized in size.
+# Maze CLI Game
 
-## Requirements
-- Print a simple maze to the terminal
-- Allow user to specify the size of the maze
-- Use ASCII characters to represent walls and paths
-- Simple maze generation - draw the correct line path
-- fill rest of maze with random walls and paths
-- No need for complex algorithms like DFS or DFS
-- Take in user input for maze size
-- Take in user input for direction
-- Refresh the maze display after each move
-- Use standard libraries
+A command-line maze game written in C++ where you navigate through a randomly generated maze from the left edge to the right edge.
 
-## Functional breakdown
-1. **Maze Generation**: Create a function to generate a maze of given dimensions using a inputs
-  - Welcome user
-  - Prompt user for maze size (width and height)
-  - Generate correct maze path and fill rest with random walls and paths
-  - All this will be in simple array manipulation
-2. **Display Maze**: Create a function to print the maze to the terminal using ASCII
-  - Use characters like `#` for walls and spaces for paths
-3. **User Input**: Create a function to handle user input for maze size and movement
-  - Use `input()` to get maze size and movement command-line
-4. **Game Loop**: Create a loop to allow continuous interaction until the user decides to height
-  - Refresh the maze display after each move
-  - Check for win condition (reaching the end of the maze)
-5. **Exit Condition**: Allow the user to exit the game gracefully
+## Features
 
-### NOTES
-- This is a basic implementation and so a lot of the code will be very Functional
-- In the future we can add more OOP principles with classes for Maze, Player, etc.
+- **Random Maze Generation**: Generates unique mazes with a guaranteed solution path
+- **Customizable Size**: User can specify maze width and height (default: 75x20)
+- **ASCII Display**: Uses `#` for walls, spaces for paths, and `*` for player position
+- **Vim-style Controls**: Navigate using h (left), j (down), k (up), l (right)
+- **Interactive Gameplay**: Real-time maze display updates after each move
+- **Win Detection**: Celebrates when you reach the exit
+
+## Building the Project
+
+This project uses CMake for building:
+
+```bash
+# Create build directory
+mkdir -p build
+cd build
+
+# Configure and build
+cmake ..
+make
+
+# Run the game
+./MazeCLI
+```
+
+### Requirements
+
+- CMake 3.23 or higher
+- C++20 compatible compiler (g++, clang++)
+- GLFW3 (included in dependencies)
+
+## How to Play
+
+1. Run the executable
+2. Enter desired maze dimensions (or press Enter for defaults)
+3. Navigate from the start position (left edge) to the exit (right edge)
+4. Use keyboard controls:
+   - `h` - Move left
+   - `j` - Move down
+   - `k` - Move up
+   - `l` - Move right
+   - `q` - Quit game
+
+## Project Structure
+
+```
+maze-cli/
+├── main.cpp              # Entry point and user input handling
+├── CMakeLists.txt        # Build configuration
+├── include/
+│   ├── builder.h         # Maze class declaration
+│   ├── runner.h          # GameRunner class declaration
+│   └── welcome.h         # Welcome message functions
+└── src/
+    ├── builder.cpp       # Maze generation implementation
+    ├── runner.cpp        # Game loop and player movement
+    └── welcome.cpp       # Welcome and rules display
+```
+
+## Architecture
+
+### Maze Class (`builder.h/cpp`)
+
+- Generates maze grid with walls and paths
+- Places random start and end positions on left/right edges
+- Creates a guaranteed solution path
+- Fills remaining space with random paths (50% density)
+
+### GameRunner Class (`runner.h/cpp`)
+
+- Manages game state and player position
+- Handles movement validation and collision detection
+- Updates and displays the maze after each move
+- Checks win condition
+
+### Main Flow
+
+1. Display welcome message and rules
+2. Prompt user for maze dimensions
+3. Generate maze using `Maze` class
+4. Start game loop with `GameRunner`
+5. Process player input and update display
+6. Detect win condition and celebrate
+
+## Implementation Details
+
+- **Maze Generation Algorithm**: Creates a simple path from start to end using horizontal and vertical moves, with forced vertical movement every 3 horizontal steps to prevent straight lines
+- **Random Fill**: Fills 50% of remaining walls with paths for visual complexity
+- **OOP Design**: Uses classes for clean separation of concerns (Maze generation vs. Game logic)
+- **Standard Library**: Relies primarily on C++ standard library (vector, iostream, etc.)
