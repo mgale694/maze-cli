@@ -42,3 +42,7 @@
 
 # build files
 build
+*.dsym
+
+# VSCode settings
+.vscode
